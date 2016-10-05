@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +7,29 @@ using System.Threading.Tasks;
 
 namespace Unicorn
 {
-    public class MoveList
+    public class MoveList : IEnumerable
     {
         public MoveList()
         {
             moves = new List<Move>();
         }
+
+        public Move this[int index]
+        {
+            get { return moves[index]; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return moves.GetEnumerator();
+        }
+
         public void Clear()
         {
             moves.Clear();
             maxLength = 0;
         }
+
         public void Add(Move move)
         {
             if ( move.KillCount > maxLength)

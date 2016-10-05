@@ -116,7 +116,50 @@ namespace Unicorn
 
         private void FindNextWhiteManCapture(int square, int fromDir, int deep, Move move)
         {
+            bool found = false;
+            for ( int i = 0; i < dirs.Length; i++ )
+            {
+                if (dirs[i] != -fromDir)
+                {
+                    int next = square + dirs[i];
+                    if (position.GetPiece(next).IsBlack)
+                    {
+                        int dest = next + dirs[i];
+                        if (position.GetPiece(dest).IsEmpty)
+                        {
+                            found = true;
+                            move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep + 1);
+                            position.GetPiece(next).ChangeColor();
+                            if (position.IsPromoteSquare(dest, Team.White))
+                            {
+                                if (promoteImmediate)
+                                {
+                                    FindWhitePromoCapture(dest, dirs[i], deep+1, move);
+                                }
+                                else
+                                {
+                                    FindNextWhiteManCapture(dest, dirs[i], deep + 1, move);
+                                }
+                            }
+                            else
+                            {
+                                FindWhitePromoCapture(dest, dirs[i], deep+1, move);
+                            }
+                            position.GetPiece(next).ChangeColor();
+                        }
+                    }
+                }
+            }
 
+            if (!found)
+            {
+                move.To = square;
+                if (position.IsPromoteSquare(square, Team.White))
+                    move.After = Piece.PieceValue.WhiteKing;
+                else
+                    move.After = Piece.PieceValue.WhiteMan;
+                list.Add(move);
+            }
         }
 
         private void FindWhitePromoCapture(int square, int fromDir, int deep, Move move)
