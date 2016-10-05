@@ -49,7 +49,24 @@ namespace UnitTests
         public void TestPromoSquares()
         {
             Position pos = new Position();
+            Assert.IsTrue(pos.IsPromoteSquare(6, Team.White));
             Assert.IsTrue(pos.IsPromoteSquare(7, Team.White));
+            Assert.IsTrue(pos.IsPromoteSquare(8, Team.White));
+            Assert.IsTrue(pos.IsPromoteSquare(9, Team.White));
+            Assert.IsTrue(pos.IsPromoteSquare(10, Team.White));
+
+            Assert.IsFalse(pos.IsPromoteSquare(5, Team.White));
+            Assert.IsFalse(pos.IsPromoteSquare(11, Team.White));
+
+            Assert.IsTrue(pos.IsPromoteSquare(55, Team.Black));
+            Assert.IsTrue(pos.IsPromoteSquare(56, Team.Black));
+            Assert.IsTrue(pos.IsPromoteSquare(57, Team.Black));
+            Assert.IsTrue(pos.IsPromoteSquare(58, Team.Black));
+            Assert.IsTrue(pos.IsPromoteSquare(59, Team.Black));
+
+            Assert.IsFalse(pos.IsPromoteSquare(54, Team.Black));
+            Assert.IsFalse(pos.IsPromoteSquare(60, Team.Black));
+
         }
     }
 }

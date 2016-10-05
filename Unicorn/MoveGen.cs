@@ -74,33 +74,36 @@ namespace Unicorn
         
         private void TryWhiteManCapture(int square)
         {
-            for ( int i = 0; i < dirs.Length; i++)
+            foreach (int t in dirs)
             {
-                int next = square + dirs[i];
+                int next = square + t;
                 if (position.GetPiece(next).IsBlack)
                 {
-                    int dest = next + dirs[i];
+                    int dest = next + t;
                     if (position.GetPiece(dest).IsEmpty)
                     {
-                        move = new Move();
-                        move.From = square;
-                        move.Before = Piece.PieceValue.WhiteMan;
+                        move = new Move
+                        {
+                            From = square,
+                            Before = Piece.PieceValue.WhiteMan
+                        };
+
                         move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), 1);
                         position.GetPiece(next).ChangeColor();
                         if (position.IsPromoteSquare(dest, Team.White))
                         {
                             if (promoteImmediate)
                             {
-                                FindWhitePromoCapture(dest, dirs[i], 1, move);
+                                FindWhitePromoCapture(dest, t, 1, move);
                             }
                             else
                             {
-                                FindNextWhiteManCapture(dest, dirs[i], 1, move);
+                                FindNextWhiteManCapture(dest, t, 1, move);
                             }
                         }
                         else
                         {
-                            FindNextWhiteManCapture(dest, dirs[i], 1, move);
+                            FindNextWhiteManCapture(dest, t, 1, move);
                         }
 
                         position.GetPiece(next).ChangeColor();
@@ -108,23 +111,59 @@ namespace Unicorn
                 }
             }
         }
-        
+
+
         private void TryBlackManCapture(int square)
         {
+            foreach (int dir in dirs)
+            {
+                int next = square + dir;
+                if (position.GetPiece(next).IsWhite)
+                {
+                    int dest = next + dir;
+                    if (position.GetPiece(dest).IsEmpty)
+                    {
+                        move = new Move
+                        {
+                            From = square,
+                            Before = Piece.PieceValue.BlackMan
+                        };
 
+                        move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), 1);
+                        position.GetPiece(next).ChangeColor();
+                        if (position.IsPromoteSquare(dest, Team.Black))
+                        {
+                            if (promoteImmediate)
+                            {
+                                FindBlackPromoCapture(dest, dir, 1, move);
+                            }
+                            else
+                            {
+                                FindNextBlackManCapture(dest, dir, 1, move);
+                            }
+                        }
+                        else
+                        {
+                            FindNextBlackManCapture(dest, dir, 1, move);
+                        }
+
+                        position.GetPiece(next).ChangeColor();
+                    }
+                }
+            }
         }
 
         private void FindNextWhiteManCapture(int square, int fromDir, int deep, Move move)
         {
             bool found = false;
-            for ( int i = 0; i < dirs.Length; i++ )
+            foreach (int dir in dirs)
             {
-                if (dirs[i] != -fromDir)
+                if (dir != -fromDir)
                 {
-                    int next = square + dirs[i];
+                    int next = square + dir;
                     if (position.GetPiece(next).IsBlack)
                     {
-                        int dest = next + dirs[i];
+                        int dest = next + dir;
                         if (position.GetPiece(dest).IsEmpty)
                         {
                             found = true;
@@ -134,16 +173,16 @@ namespace Unicorn
                             {
                                 if (promoteImmediate)
                                 {
-                                    FindWhitePromoCapture(dest, dirs[i], deep+1, move);
+                                    FindWhitePromoCapture(dest, dir, deep+1, move);
                                 }
                                 else
                                 {
-                                    FindNextWhiteManCapture(dest, dirs[i], deep + 1, move);
+                                    FindNextWhiteManCapture(dest, dir, deep + 1, move);
                                 }
                             }
                             else
                             {
-                                FindWhitePromoCapture(dest, dirs[i], deep+1, move);
+                                FindWhitePromoCapture(dest, dir, deep+1, move);
                             }
                             position.GetPiece(next).ChangeColor();
                         }
@@ -165,6 +204,16 @@ namespace Unicorn
         private void FindWhitePromoCapture(int square, int fromDir, int deep, Move move)
         {
 
+        }
+
+        private void FindNextBlackManCapture(int square, int fromDir, int deep, Move move)
+        {
+            
+        }
+
+        private void FindBlackPromoCapture(int square, int fromDir, int deep, Move move)
+        {
+            
         }
 
         private void TryWhiteKingCapture(int square)

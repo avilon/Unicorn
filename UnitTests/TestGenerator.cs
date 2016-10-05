@@ -79,5 +79,15 @@ namespace UnitTests
                 Assert.AreEqual(1, move.KillCount);
             }
         }
+
+        [TestMethod]
+        public void TestBlackManSilent()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("");
+        }
     }
 }

@@ -195,9 +195,9 @@ namespace Unicorn
         private void SetPromoSquares()
         {
             maxPromoSquareForBlack = map[Size-1] + 1;
-            minPromoSquareForBlack = maxPromoSquareForBlack - (width/2 + 2);
+            minPromoSquareForBlack = maxPromoSquareForBlack - (width/2 + 1);
             minPromoSquareForWhite = map[0] - 1;
-            maxPromoSquareForWhite = minPromoSquareForWhite + width/2 + 2;
+            maxPromoSquareForWhite = minPromoSquareForWhite + (width/2 + 1);
         }
 
         private int height;
