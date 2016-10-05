@@ -48,6 +48,9 @@ namespace Unicorn
         /// </summary>
         public Team MoveColor { get { return moveColor; } }
 
+        public int MoveRight { get { return moveRight; } }
+        public int MoveLeft { get { return moveLeft; } }
+
         public Piece this[int index]
         {
             get { return pieces[map[index]]; }
@@ -139,15 +142,38 @@ namespace Unicorn
                 }
             }            
         }
+        public int GetSquareNumber(int index)
+        {
+            return map[index];
+        }
+
+        public bool IsPromoteSquare(int square, Team color)
+        {
+            if (color == Team.White)
+            {
+                if ((square > minPromoSquareForWhite) && (square < maxPromoSquareForWhite))
+                    return true;
+            }
+            else
+            {
+                if ((square > minPromoSquareForBlack) && (square < maxPromoSquareForBlack))
+                    return true;
+            }
+            return false;
+        }
+
         private void Init()        
         {
             squareCount = size + height/2 + width + 1;
             pieces = new Piece[squareCount];
+            moveRight = Height / 2;
+            moveLeft = moveRight + 1;
             for ( int i = 0; i < squareCount; i++)
                 pieces[i] = new Piece();
 
             map = new int[size];
-            InitMap();    
+            InitMap();
+            SetPromoSquares();
         }
 
         private void InitMap()
@@ -166,12 +192,28 @@ namespace Unicorn
             }
         }
         
+        private void SetPromoSquares()
+        {
+            maxPromoSquareForBlack = map[Size-1] + 1;
+            minPromoSquareForBlack = maxPromoSquareForBlack - (width/2 + 2);
+            minPromoSquareForWhite = map[0] - 1;
+            maxPromoSquareForWhite = minPromoSquareForWhite + width/2 + 2;
+        }
+
         private int height;
         private int width;
         private int size;
         private int squareCount;
         private int piecesPerSide;
         private Team moveColor;
+
+        private int moveRight;
+        private int moveLeft;
+
+        private int minPromoSquareForWhite;
+        private int maxPromoSquareForWhite;
+        private int minPromoSquareForBlack;
+        private int maxPromoSquareForBlack;
 
         private Piece[] pieces;
         private int[] map;

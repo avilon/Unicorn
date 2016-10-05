@@ -8,21 +8,21 @@ namespace Unicorn
 {
     public class PieceLocation : ICloneable
     {
-        public PieceLocation(int square, Piece piece)
+        public PieceLocation(int square, Piece.PieceValue piece)
         {
             this.square = square;
-            this.piece = (Piece)piece.Clone();
+            this.piece = piece;
         }
 
         public int Square { get { return this.square; } }
-        public Piece Piece { get { return this.piece; } }
+        public Piece.PieceValue Piece { get { return this.piece; } }
 
         private int square;
-        private Piece piece;
+        private Piece.PieceValue piece;
 
         public object Clone()
         {
-            return new PieceLocation(this.square, (Piece)this.piece.Clone());
+            return new PieceLocation(this.square, this.Piece);
         }
     }
 }

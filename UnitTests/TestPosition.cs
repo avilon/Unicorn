@@ -36,6 +36,20 @@ namespace UnitTests
             Assert.AreEqual(Team.White, pos.MoveColor);
             Assert.IsTrue(pos[0].IsBlack);
             Assert.IsTrue(pos[0].IsMan);
+            Assert.IsTrue(pos[1].IsBlack);
+            Assert.IsTrue(pos[1].IsMan);
+
+            Assert.IsTrue(pos[48].IsWhite);
+            Assert.IsTrue(pos[48].IsMan);
+            Assert.IsTrue(pos[49].IsWhite);
+            Assert.IsTrue(pos[49].IsMan);
+        }
+
+        [TestMethod]
+        public void TestPromoSquares()
+        {
+            Position pos = new Position();
+            Assert.IsTrue(pos.IsPromoteSquare(7, Team.White));
         }
     }
 }

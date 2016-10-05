@@ -30,17 +30,26 @@ namespace Unicorn
         /// <summary>
         /// Какая фигура начинает ход
         /// </summary>
-        public Piece After { get; set; }
+        public Piece.PieceValue After { get; set; }
         
         /// <summary>
         /// Какая фигура заканчивает ход ( простая может превратится в дамку )
         /// </summary>
-        public Piece Before { get; set; }
+        public Piece.PieceValue Before { get; set; }
         
         /// <summary>
         /// Количество сбитых после хода фигур противника
         /// </summary>
         public int KillCount { get { return killCount; } }
+
+        public void Reset()
+        {
+            From = 0;
+            To = 0;
+            Before = Piece.PieceValue.Empty;
+            After = Piece.PieceValue.Empty;
+            killCount = 0;
+        }
 
         public void AddKillPiece(PieceLocation ploc, int index)
         {
@@ -58,8 +67,8 @@ namespace Unicorn
             Move move = new Move();
             move.From = this.From;
             move.To = this.To;
-            move.Before = (Piece)this.Before.Clone();
-            move.After = (Piece)this.After.Clone();
+            move.Before = this.Before;
+            move.After = this.After;
             move.killCount = this.KillCount;
             if ( this.killCount > 0 )
             {
