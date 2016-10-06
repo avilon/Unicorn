@@ -55,6 +55,7 @@
     <Compile Include="TestPiece.cs" />
     <Compile Include="TestFen.cs" />
     <Compile Include="TestGenerator.cs" />
+    <Compile Include="TestEngine.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Unicorn\Unicorn.csproj">
