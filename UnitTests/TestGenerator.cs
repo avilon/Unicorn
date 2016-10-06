@@ -87,7 +87,83 @@ namespace UnitTests
             MoveList list = new MoveList();
             MoveGen gen = new MoveGen(pos);
 
-            pos.Setup("");
+            pos.Setup("B:W46, 47:B1,2.");
+            gen.Generate(list);
+            Assert.AreEqual(4, list.Count);
+            pos.Setup("B:W46,47, 48, 49, 50:B1,2, 3, 4, 5.");
+            gen.Generate(list);
+            Assert.AreEqual(9, list.Count);
+        }
+
+        [TestMethod]
+        public void TestBlackKingSilent()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("B:WK50:BK5.");
+            gen.Generate(list);
+            Assert.AreEqual(9, list.Count);
+
+            pos.Setup("B:WK50:BK5,K1.");
+            gen.Generate(list);
+            Assert.AreEqual(18, list.Count);
+        }
+
+        [TestMethod]
+        public void TestBlackManCaptures()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("B:W7,50:W1,2.");
+            gen.Generate(list);
+            Assert.AreEqual(2, list.Count);
+        }
+
+        [TestMethod]
+        public void TestWhitePromoCapture()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("W:W15:B10.");
+            gen.Generate(list);
+            Assert.AreEqual(1, list.Count);
+            Assert.AreEqual(21, list[0].From);
+            Assert.AreEqual(9, list[0].To);
+            Assert.AreEqual(Piece.PieceValue.WhiteMan, list[0].Before);
+            Assert.AreEqual(Piece.PieceValue.WhiteKing, list[0].After);
+            Assert.AreEqual(1, list[0].KillCount);
+            Assert.AreEqual(Piece.PieceValue.BlackMan, list[0].GetKillPieceValue(0));
+            Assert.AreEqual(15, list[0].GetKillSquare(0));
+        }
+
+        [TestMethod]
+        public void TestWhiteKingCapture()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("W:WK50:B44.");
+            gen.Generate(list);
+            Assert.AreEqual(7, list.Count);
+
+            pos.Setup("W:WK50:B11.");
+            gen.Generate(list);
+            Assert.AreEqual(1, list.Count);
+
+            pos.Setup("W:WK16,K50:B11.");
+            gen.Generate(list);
+            Assert.AreEqual(3, list.Count);
+
+            pos.Setup("W:WK16,K50:B7,17.");
+            gen.Generate(list);
+            Assert.AreEqual(1, list.Count);
         }
     }
 }

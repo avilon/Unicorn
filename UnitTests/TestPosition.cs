@@ -68,5 +68,29 @@ namespace UnitTests
             Assert.IsFalse(pos.IsPromoteSquare(60, Team.Black));
 
         }
+
+        [TestMethod]
+        public void TestDoMove()
+        {
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            pos.Setup("W:W45:B1.");
+            Assert.AreEqual(Piece.PieceValue.WhiteMan, pos[44].Value);
+            Assert.AreEqual(Piece.PieceValue.Empty, pos[39].Value);
+
+            gen.Generate(list);
+            Assert.AreEqual(1, list.Count);
+            pos.DoMove(list[0]);
+            Assert.AreEqual(Piece.PieceValue.Empty, pos[44].Value);
+            Assert.AreEqual(Piece.PieceValue.WhiteMan, pos[39].Value);
+        }
+
+        [TestMethod]
+        public void TestDoUndoMove()
+        {
+
+        }
     }
 }

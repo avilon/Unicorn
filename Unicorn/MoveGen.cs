@@ -203,27 +203,241 @@ namespace Unicorn
 
         private void FindWhitePromoCapture(int square, int fromDir, int deep, Move move)
         {
+            /*
+             * Здесь fromDir - это индекс в массиве dirs, а не значение
+             */
+            int nextDir = dirs[fromDir ^ 3];
+            bool found = false;
 
+            int next = square + nextDir;
+            while (position.GetPiece(next).IsEmpty)
+            {
+                next += nextDir;
+            }
+            if (position.GetPiece(next).IsBlack)
+            {
+                int dest = next + nextDir;
+                if ( position.GetPiece(dest).IsEmpty)
+                {
+                    found = true;
+                    move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep + 1);
+                    position.GetPiece(next).ChangeColor();
+                    FindWhiteKingCapture(dest, nextDir, deep + 1, move);
+                    position.GetPiece(next).ChangeColor();
+                }
+            }
+            if (!found)
+            {
+                move.To = square;
+                move.After = Piece.PieceValue.WhiteKing;
+                list.Add(move);
+            }
         }
 
         private void FindNextBlackManCapture(int square, int fromDir, int deep, Move move)
         {
-            
+            bool found = false;
+            foreach (int dir in dirs)
+            {
+                if (dir != -fromDir)
+                {
+                    int next = square + dir;
+                    if (position.GetPiece(next).IsWhite)
+                    {
+                        int dest = next + dir;
+                        if (position.GetPiece(dest).IsEmpty)
+                        {
+                            found = true;
+                            move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep + 1);
+                            position.GetPiece(next).ChangeColor();
+                            if (position.IsPromoteSquare(dest, Team.Black))
+                            {
+                                if (promoteImmediate)
+                                {
+                                    FindBlackPromoCapture(dest, dir, deep + 1, move);
+                                }
+                                else
+                                {
+                                    FindNextBlackManCapture(dest, dir, deep + 1, move);
+                                }
+                            }
+                            else
+                            {
+                                FindWhitePromoCapture(dest, dir, deep + 1, move);
+                            }
+                            position.GetPiece(next).ChangeColor();
+                        }
+                    }
+                }
+            }
+
+            if (!found)
+            {
+                move.To = square;
+                if (position.IsPromoteSquare(square, Team.White))
+                    move.After = Piece.PieceValue.BlackKing;
+                else
+                    move.After = Piece.PieceValue.BlackMan;
+                list.Add(move);
+            }            
         }
 
         private void FindBlackPromoCapture(int square, int fromDir, int deep, Move move)
         {
-            
+            int nextDir = dirs[fromDir ^ 3];
+            bool found = false;
+
+            int next = square + nextDir;
+            while (position.GetPiece(next).IsEmpty)
+            {
+                next += nextDir;
+            }
+            if (position.GetPiece(next).IsWhite)
+            {
+                int dest = next + nextDir;
+                if (position.GetPiece(dest).IsEmpty)
+                {
+                    found = true;
+                    move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep + 1);
+                    position.GetPiece(next).ChangeColor();
+                    FindBlackKingCapture(dest, nextDir, deep + 1, move);
+                    position.GetPiece(next).ChangeColor();
+                }
+            }
+            if (!found)
+            {
+                move.To = square;
+                move.After = Piece.PieceValue.BlackKing;
+                list.Add(move);
+            }            
         }
 
         private void TryWhiteKingCapture(int square)
         {
+            foreach (int dir in dirs)
+            {
+                int next = square + dir;
+                while (position.GetPiece(next).IsEmpty)
+                {
+                    next += dir;
+                }
+                if (position.GetPiece(next).IsBlack)
+                {
+                    int dest = next + dir;
+                    if ( position.GetPiece(dest).IsEmpty)
+                    {
+                        Move move = new Move();
+                        move.From = square;
+                        move.Before = Piece.PieceValue.WhiteKing;
+                        move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), 1);
+                        position.GetPiece(next).ChangeColor();
+                        FindWhiteKingCapture(dest, dir, 1, move);
+                        position.GetPiece(next).ChangeColor();
+                    }
+                }
+            }
+        }
 
+        private void FindWhiteKingCapture(int square, int fromDir, int deep, Move move)
+        {
+            bool found = false;
+            foreach(int dir in dirs)
+            {
+                if (dir != -fromDir)
+                {
+                    int next = square + dir;
+                    while(position.GetPiece(next).IsEmpty)
+                    {
+                        next += dir;
+                    }
+                    if (position.GetPiece(next).IsBlack)
+                    {
+                        int dest = next + dir;
+                        if (position.GetPiece(dest).IsEmpty)
+                        {
+                            found = true;
+                            move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep+1);
+                            position.GetPiece(next).ChangeColor();
+                            FindWhiteKingCapture(dest, dir, deep + 1, move);
+                            position.GetPiece(next).ChangeColor();
+                        }
+                    }
+                }
+            }
+            if (!found)
+            {
+                while (position.GetPiece(square).IsEmpty)
+                {
+                    move.To = square;
+                    move.After = Piece.PieceValue.WhiteKing;
+                    list.Add(move);
+                    square += fromDir;
+                }
+            }
         }
         
         private void TryBlackKingCapture(int square)
         {
+            foreach (int dir in dirs)
+            {
+                int next = square + dir;
+                while (position.GetPiece(next).IsEmpty)
+                {
+                    next += dir;
+                }
+                if (position.GetPiece(next).IsWhite)
+                {
+                    int dest = next + dir;
+                    if (position.GetPiece(dest).IsEmpty)
+                    {
+                        Move move = new Move();
+                        move.From = square;
+                        move.Before = Piece.PieceValue.WhiteKing;
+                        move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), 1);
+                        position.GetPiece(next).ChangeColor();
+                        FindBlackKingCapture(dest, dir, 1, move);
+                        position.GetPiece(next).ChangeColor();
+                    }
+                }
+            }
+        }
 
+        private void FindBlackKingCapture(int square, int fromDir, int deep, Move move)
+        {
+            bool found = false;
+            foreach (int dir in dirs)
+            {
+                if (dir != -fromDir)
+                {
+                    int next = square + dir;
+                    while (position.GetPiece(next).IsEmpty)
+                    {
+                        next += dir;
+                    }
+                    if (position.GetPiece(next).IsWhite)
+                    {
+                        int dest = next + dir;
+                        if (position.GetPiece(dest).IsEmpty)
+                        {
+                            found = true;
+                            move.AddKillPiece(new PieceLocation(next, position.GetPiece(next).Value), deep + 1);
+                            position.GetPiece(next).ChangeColor();
+                            FindWhiteKingCapture(dest, dir, deep + 1, move);
+                            position.GetPiece(next).ChangeColor();
+                        }
+                    }
+                }
+            }
+            if (!found)
+            {
+                while (position.GetPiece(square).IsEmpty)
+                {
+                    move.To = square;
+                    move.After = Piece.PieceValue.BlackKing;
+                    list.Add(move);
+                    square += fromDir;
+                }
+            }
         }
 
         private void GenerateSilentMoves()

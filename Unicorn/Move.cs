@@ -42,6 +42,16 @@ namespace Unicorn
         /// </summary>
         public int KillCount { get { return killCount; } }
 
+        public int GetKillSquare(int index)
+        {
+            return kills[index].Square;
+        }
+
+        public Piece.PieceValue GetKillPieceValue(int index)
+        {
+            return kills[index].Piece;
+        }
+
         public void Reset()
         {
             From = 0;

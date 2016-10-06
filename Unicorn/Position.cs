@@ -108,6 +108,28 @@ namespace Unicorn
             }
         }
 
+        public void DoMove(Move move)
+        {
+            pieces[move.From].Clear();
+            SetPiece(move.To, move.After);
+            for ( int i = 0; i < move.KillCount; i++)
+            {
+                pieces[move.GetKillSquare(i)].Clear();
+            }
+            ChangeMoveColor();
+        }
+
+        public void UndoMove(Move move)
+        {
+            pieces[move.To].Clear();
+            SetPiece(move.From, move.Before);
+            for ( int i = 0; i < move.KillCount; i++ )
+            {
+                SetPiece(move.GetKillSquare(i), move.GetKillPieceValue(i));
+            }
+            ChangeMoveColor();
+        }
+
         public Piece GetPiece(int square)
         {
             return pieces[square];
@@ -142,6 +164,19 @@ namespace Unicorn
                 }
             }            
         }
+
+        public void SetPiece(int square, Piece.PieceValue piece)
+        {
+            switch (piece)
+            {
+                case Piece.PieceValue.WhiteMan : pieces[square].SetWhiteMan();  break;
+                case Piece.PieceValue.WhiteKing: pieces[square].SetWhiteKing(); break;
+                case Piece.PieceValue.BlackMan : pieces[square].SetBlackMan();  break;
+                case Piece.PieceValue.BlackKing: pieces[square].SetBlackKing(); break;
+                default: break;
+            }
+        }
+
         public int GetSquareNumber(int index)
         {
             return map[index];
@@ -198,6 +233,14 @@ namespace Unicorn
             minPromoSquareForBlack = maxPromoSquareForBlack - (width/2 + 1);
             minPromoSquareForWhite = map[0] - 1;
             maxPromoSquareForWhite = minPromoSquareForWhite + (width/2 + 1);
+        }
+
+        private void ChangeMoveColor()
+        {
+            if (moveColor == Team.White)
+                moveColor = Team.Black;
+            else
+                moveColor = Team.White;
         }
 
         private int height;
