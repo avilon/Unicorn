@@ -67,6 +67,9 @@ namespace Unicorn
                 return false;
 
             Position pos = (Position)obj;
+            if (pos.MoveColor != this.MoveColor)
+                return false;
+
             for (int i = 0; i < Size; i++)
             {
                 if (this.pieces[map[i]].Value != pos[i].Value)

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine.cs" />
     <Compile Include="Fen.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGen.cs" />

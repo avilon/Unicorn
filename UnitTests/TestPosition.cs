@@ -70,6 +70,23 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void TestEquals()
+        {
+            Position first = new Position();
+            Position second = new Position();
+            first.Fill();
+            second.Fill();
+            Assert.IsTrue(first.Equals(second));
+            second.Setup("W:W46,47:B1,2.");
+            Assert.IsFalse(first.Equals(second));
+            first.Setup("W:W46,47:B1,2.");
+            Assert.IsTrue(first.Equals(second));
+
+            second.Setup("B:W46,47:B1,2.");
+            Assert.IsFalse(first.Equals(second));
+        }
+
+        [TestMethod]
         public void TestDoMove()
         {
             Position pos = new Position();
@@ -88,7 +105,71 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestDoUndoMove()
+        public void TestDoUndoSilentMove()
+        {
+            Position etalon = new Position();
+
+            Position pos = new Position();
+            MoveList list = new MoveList();
+            MoveGen gen = new MoveGen(pos);
+
+            etalon.Setup("W:W45:B1.");
+            pos.Setup("W:W45:B1.");
+            Assert.IsTrue(pos.Equals(etalon));
+
+            gen.Generate(list);
+            Assert.AreEqual(1, list.Count);
+            pos.DoMove(list[0]);
+            pos.UndoMove(list[0]);
+            Assert.IsTrue(pos.Equals(etalon));
+
+            etalon.Setup("W:WK46:B1.");
+            pos.Setup("W:WK46:B1.");
+            Assert.IsTrue(pos.Equals(etalon));
+            gen.Generate(list);
+            for ( int i = 0; i < list.Count; i++)
+            {
+                pos.DoMove(list[i]);
+                pos.UndoMove(list[i]);
+            }
+            Assert.IsTrue(pos.Equals(etalon));
+
+            etalon.Setup("W:WK46,K47,K48,K49:B1.");
+            pos.Setup("W:WK46,K47,K48,K49:B1.");
+            Assert.IsTrue(pos.Equals(etalon));
+            gen.Generate(list);
+            for (int i = 0; i < list.Count; i++)
+            {
+                pos.DoMove(list[i]);
+                pos.UndoMove(list[i]);
+            }
+            Assert.IsTrue(pos.Equals(etalon));
+
+            etalon.Setup("B:WK50:BK1,K2,K3,K4,K5.");
+            pos.Setup("B:WK50:BK1,K2,K3,K4,K5.");
+            Assert.IsTrue(pos.Equals(etalon));
+            gen.Generate(list);
+            for (int i = 0; i < list.Count; i++)
+            {
+                pos.DoMove(list[i]);
+                pos.UndoMove(list[i]);
+            }
+            Assert.IsTrue(pos.Equals(etalon));
+
+            etalon.Fill();
+            pos.Fill();
+            Assert.IsTrue(pos.Equals(etalon));
+            gen.Generate(list);
+            for (int i = 0; i < list.Count; i++)
+            {
+                pos.DoMove(list[i]);
+                pos.UndoMove(list[i]);
+            }
+            Assert.IsTrue(pos.Equals(etalon));
+        }
+
+        [TestMethod]
+        public void TestDoUndoCaptures()
         {
 
         }
