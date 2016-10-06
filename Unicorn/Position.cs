@@ -185,6 +185,22 @@ namespace Unicorn
             return map[index];
         }
 
+        /// <summary>
+        /// Преобразует внутренний номер squareNum в реальный номер поля, 
+        /// который используется в нотации для записи партий, нумерация идет от 1 до N
+        /// </summary>
+        /// <param name="squareNum"></param>
+        /// <returns></returns>
+        public int GetBoardNumber(int squareNum)
+        {
+            for ( int i = 0; i < map.Length; i++)
+            {
+                if (map[i] == squareNum)
+                    return i + 1;
+            }
+            return 0;
+        }
+
         public bool IsPromoteSquare(int square, Team color)
         {
             if (color == Team.White)

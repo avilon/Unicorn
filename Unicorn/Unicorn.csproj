@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Engine.cs" />
     <Compile Include="Fen.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="MoveGen.cs" />
     <Compile Include="MoveList.cs" />
