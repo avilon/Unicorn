@@ -42,6 +42,23 @@ namespace Unicorn
         /// </summary>
         public int KillCount { get { return killCount; } }
 
+        public override string ToString()
+        {
+            string str = From.ToString() + "-" + To.ToString();
+            if (killCount > 0)
+            {
+                str = str + ":" + killCount.ToString();
+                for ( int i = 0; i < killCount; i++)
+                {
+                    if (i > 0)
+                        str += ";";
+                    str += kills[i].Square.ToString();
+                }
+            }
+
+            return str;
+        }
+
         public int GetKillSquare(int index)
         {
             return kills[index].Square;
