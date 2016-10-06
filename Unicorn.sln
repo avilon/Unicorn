@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unicorn", "Unicorn\Unicorn.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{DEEC64F4-8801-427F-8783-AF823D57970A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinBoard", "WinBoard\WinBoard.csproj", "{844D7949-37AD-482D-9283-0856F545D728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DEEC64F4-8801-427F-8783-AF823D57970A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEEC64F4-8801-427F-8783-AF823D57970A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEEC64F4-8801-427F-8783-AF823D57970A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{844D7949-37AD-482D-9283-0856F545D728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{844D7949-37AD-482D-9283-0856F545D728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{844D7949-37AD-482D-9283-0856F545D728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{844D7949-37AD-482D-9283-0856F545D728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
